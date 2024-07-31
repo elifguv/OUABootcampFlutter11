@@ -1,12 +1,8 @@
-import 'package:flutter/material.dart';
-import 'home_viewmodel.dart';
+class HomeState {
+  List<String> carouselImages = [
+    'assets/images/exhibition_home.jpeg',
+    'assets/images/exhibition_home2.jpg',
+  ];
 
-class HomeState extends ChangeNotifier {
-  HomeViewModel? _viewModel;
-
-  void update(HomeViewModel viewModel) {
-    _viewModel = viewModel;
-    notifyListeners();
-  }
-
+  HomeState();
 }

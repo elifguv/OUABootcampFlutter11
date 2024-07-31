@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:muse/views/my_works/my_works_view.dart';
 import 'package:muse/views/sign_in/sign_in_view.dart';
 import 'package:provider/provider.dart';
 import '../../core/constants/bottom_navigation_bar.dart';
