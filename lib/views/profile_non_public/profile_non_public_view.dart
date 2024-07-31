@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import '../profile/profile_viewmodel.dart';
+import 'package:muse/views/profile/profile_view.dart';
 import 'package:muse/views/sign_in/sign_in_view.dart';
 import 'package:provider/provider.dart';
 import '../../core/constants/bottom_navigation_bar.dart';
+import '../profile_edit/profile_edit_viewmodel.dart';
+import '../profile_edit/profile_edit_view.dart';
 import 'profile_non_public_viewmodel.dart';
 
 class ProfileNonPublicPage extends StatefulWidget {
@@ -21,7 +25,12 @@ class _ProfileNonPublicPageState extends State<ProfileNonPublicPage> {
           leading: IconButton(
             icon: const Icon(Icons.arrow_back, color: Color(0xFFB71C1C)),
             onPressed: () {
-              Navigator.of(context).pop();
+              Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => ChangeNotifierProvider(
+                  create: (context) => ProfileViewModel(),
+                  child: ProfilePage(),
+                ),
+              ));
             },
           ),
           title: const Text('Profile'),
@@ -62,6 +71,12 @@ class _ProfileNonPublicPageState extends State<ProfileNonPublicPage> {
         trailing: const Icon(Icons.arrow_forward_ios, color: Color(0xFFB71C1C)),
         onTap: () {
           // Navigate to Edit Profile page
+          Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => ChangeNotifierProvider(
+              create: (context) => ProfileEditViewModel(),
+              child: ProfileEditPage(),
+            ),
+          ));
         },
       ),
       ListTile(
