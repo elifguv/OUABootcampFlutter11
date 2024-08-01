@@ -2,13 +2,25 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../core/constants/bottom_navigation_bar.dart';
 import 'profile_edit_viewmodel.dart';
+import 'package:image_picker/image_picker.dart';
 
 class ProfileEditPage extends StatefulWidget {
+  const ProfileEditPage({super.key});
+
   @override
   _ProfileEditPageState createState() => _ProfileEditPageState();
 }
 
 class _ProfileEditPageState extends State<ProfileEditPage> {
+  final ImagePicker _picker = ImagePicker();
+
+  Future<void> _changeProfilePicture(ProfileEditViewModel viewModel) async {
+    final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      viewModel.updatePhotoUrl(pickedFile.path);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,24 +44,47 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
         centerTitle: false,
       ),
       body: Consumer<ProfileEditViewModel>(
-        builder: (context, viewModel, child) => Form(
-          child: ListView(
-            padding: const EdgeInsets.all(8),
-            children: <Widget>[
-              const SizedBox(height: 30),
-              _buildTextField(viewModel.state.userName, 'Username',
-                  onChanged: viewModel.updateUsername),
-              const SizedBox(height: 30),
-              _buildTextField(viewModel.state.email, 'Email',
-                  onChanged: viewModel.updateEmail),
-              const SizedBox(height: 30),
-              _buildTextField(
-                viewModel.state.location,
-                'Location',
-                onChanged: (value) => viewModel.state.location = value,
-              ) //update locally,
-            ],
-          ),
+        builder: (context, viewModel, child) => ListView(
+          padding: const EdgeInsets.all(8),
+          children: <Widget>[
+            Text(viewModel.state.userName,
+                style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: 'DMSans',
+                  //color: Colors.black54
+                ),
+                textAlign: TextAlign.center),
+            const SizedBox(height: 8),
+            GestureDetector(
+              onTap: () => _changeProfilePicture(viewModel),
+              child: CircleAvatar(
+                radius: 60,
+                backgroundColor: Colors.grey.shade400,
+                //show only the circle if there's no photo uploaded
+                backgroundImage: viewModel.state.photoUrl.isNotEmpty
+                    ? NetworkImage(viewModel.state.photoUrl) as ImageProvider
+                    : null,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Center(
+                child: TextButton(
+                    onPressed: () => _changeProfilePicture(viewModel),
+                    child: const Text(
+                      "Change Profile Picture",
+                      style: TextStyle(color: Color(0xFFB71C1C)),
+                    ))),
+            const SizedBox(height: 30),
+            _buildTextField(viewModel.state.userName, 'Username',
+                onChanged: viewModel.updateUsername),
+            const SizedBox(height: 30),
+            _buildTextField(viewModel.state.email, 'Email',
+                onChanged: viewModel.updateEmail),
+            const SizedBox(height: 30),
+            _buildTextField(viewModel.state.location, 'Location',
+                onChanged: (value) => viewModel.state.location = value),
+          ],
         ),
       ),
       bottomNavigationBar: CustomBottomNavigationBar(
@@ -70,12 +105,6 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
         labelText: labelText,
       ),
       onChanged: onChanged,
-      validator: (value) {
-        if (value == null || value.trim().isEmpty) {
-          return 'Please enter $labelText';
-        }
-        return null;
-      },
     );
   }
 }

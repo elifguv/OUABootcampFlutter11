@@ -1,11 +1,21 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
+import '../../models/image.dart';
 import 'profile_edit_state.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 class ProfileEditViewModel extends ChangeNotifier {
-  ProfileEditState _state = ProfileEditState();
+  final ProfileEditState _state = ProfileEditState();
   ProfileEditState get state => _state;
+  
+  //UYARI: yanlış class'ı kullanmış olabilirim
+  final defaultImage = ImageM(
+      url: '',
+      storagePath: '',
+      imageUrl: '',
+      storageId: '');
 
   void fetchUserData() async {
     User? user = FirebaseAuth.instance.currentUser;
@@ -14,8 +24,7 @@ class ProfileEditViewModel extends ChangeNotifier {
           .collection('users')
           .doc(user.uid)
           .get();
-      _state.userName = userDoc.data()?['username'] ??
-          ''; //ATTENTION: if 'username' was managed under 'firstName' field. if not, change this
+      _state.userName = userDoc.data()?['username'] ?? '';
       _state.email = userDoc.data()?['email'] ?? '';
       notifyListeners();
     }
@@ -28,8 +37,7 @@ class ProfileEditViewModel extends ChangeNotifier {
           .collection('users')
           .doc(user.uid)
           .update({
-        'username': _state
-            .userName, //if 'username' was managed under 'firstName' field. if not, change this
+        'username': _state.userName,
         'email': _state.email,
       });
       if (!disposed) {
@@ -39,7 +47,7 @@ class ProfileEditViewModel extends ChangeNotifier {
     }
   }
 
-//track if ViewModel is disposed. if so, dınt'd dispose it to update the username
+//track if ViewModel is disposed. if so, don't dispose it to update the username
   bool disposed = false;
 
   @override
@@ -56,5 +64,25 @@ class ProfileEditViewModel extends ChangeNotifier {
   void updateEmail(String email) {
     _state.email = email;
     notifyListeners();
+  }
+
+  //UYARI: istenen fotoğrafı çekmeyebilir, deneyemedim
+  void updatePhotoUrl(String filePath) async {
+    User? user = FirebaseAuth.instance.currentUser;
+    File file = File(filePath);
+    try {
+      var snapshot = await FirebaseStorage.instance
+          .ref('profile_images/${user!.uid}')
+          .putFile(file);
+      var downloadUrl = await snapshot.ref.getDownloadURL();
+      _state.photoUrl = downloadUrl;
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid)
+          .update({'photoUrl': downloadUrl});
+      notifyListeners();
+    } catch (e) {
+      print(e); //log error
+    }
   }
 }

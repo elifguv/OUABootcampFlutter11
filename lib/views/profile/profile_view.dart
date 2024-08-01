@@ -52,16 +52,16 @@ class _ProfileViewState extends State<ProfilePage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               const SizedBox(height: 20),
-              //ERRORS: trying to have an image gives errors. couldn't fix it today
-              // Padding(
-              //   padding: const EdgeInsets.symmetric(horizontal: 20.0),
-              //   child: CircleAvatar(
-              //     radius: 50,
-              //     backgroundImage: NetworkImage(viewModel.state.photoUrl.isEmpty ? 'https://pixabay.com/vectors/blank-profile-picture-mystery-man-973460/' : viewModel.state.photoUrl),
-              //     backgroundColor: Colors.transparent,
-              //   ),
-              // ),
-              // const SizedBox(height: 10),
+              Center(
+                child: CircleAvatar(
+                  radius: 50,
+                  backgroundColor: Colors.grey.shade400,
+                  backgroundImage: viewModel.state.photoUrl.isNotEmpty
+                      ? NetworkImage(viewModel.state.photoUrl) as ImageProvider
+                      : null,
+                ),
+              ),
+              const SizedBox(height: 10),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20.0),
                 child: Column(
@@ -74,7 +74,7 @@ class _ProfileViewState extends State<ProfilePage> {
                     const SizedBox(height: 5),
                     Text(viewModel.state.bio.isNotEmpty
                         ? viewModel.state.bio
-                        : 'Lorem ipsum dolor sit amet'),
+                        : 'About Me'),
                   ],
                 ),
               ),
