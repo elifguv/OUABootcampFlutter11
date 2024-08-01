@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../core/constants/bottom_navigation_bar.dart';
 import '../profile_non_public/profile_non_public_view.dart';
 import 'profile_viewmodel.dart';
 import 'package:muse/views/add_post/add_post_view.dart';
@@ -97,6 +98,9 @@ class _ProfileViewState extends State<ProfilePage> {
             ],
           ),
         ),
+      ),
+      bottomNavigationBar: CustomBottomNavigationBar(
+        currentIndex: 2,
       ),
     );
   }
