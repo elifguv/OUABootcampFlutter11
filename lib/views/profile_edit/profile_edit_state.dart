@@ -1,13 +1,11 @@
 class ProfileEditState {
-  String firstName;
-  String lastName;
+  String userName;
   String email;
   String location;
   String photoUrl;
 
   ProfileEditState({
-    this.firstName = '',
-    this.lastName = '',
+    this.userName = '',
     this.email = '',
     this.location = '',
     this.photoUrl = '',

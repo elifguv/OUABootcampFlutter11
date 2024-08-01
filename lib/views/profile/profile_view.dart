@@ -60,7 +60,7 @@ class _ProfileViewState extends State<ProfilePage> {
               //     backgroundColor: Colors.transparent,
               //   ),
               // ),
-              //const SizedBox(height: 10),
+              // const SizedBox(height: 10),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20.0),
                 child: Column(
@@ -74,10 +74,6 @@ class _ProfileViewState extends State<ProfilePage> {
                     Text(viewModel.state.bio.isNotEmpty
                         ? viewModel.state.bio
                         : 'Lorem ipsum dolor sit amet'),
-                    const SizedBox(height: 5),
-                    Text(viewModel.state.website.isNotEmpty
-                        ? viewModel.state.website
-                        : 'www.website.com'),
                   ],
                 ),
               ),

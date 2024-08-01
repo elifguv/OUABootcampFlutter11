@@ -37,14 +37,8 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
             padding: const EdgeInsets.all(8),
             children: <Widget>[
               const SizedBox(height: 30),
-              _buildTextField(viewModel.state.firstName, 'Username',
-                  onChanged: viewModel.updateFirstName),
-              const SizedBox(height: 30),
-              _buildTextField(
-                viewModel.state.lastName,
-                'Last Name',
-                onChanged: (value) => viewModel.state.lastName = value,
-              ),
+              _buildTextField(viewModel.state.userName, 'Username',
+                  onChanged: viewModel.updateUsername),
               const SizedBox(height: 30),
               _buildTextField(viewModel.state.email, 'Email',
                   onChanged: viewModel.updateEmail),
